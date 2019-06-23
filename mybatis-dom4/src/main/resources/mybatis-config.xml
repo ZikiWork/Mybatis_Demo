@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="logImpl" value="LOG4J" />
+	</settings>
+	<typeAliases>
+		<package name="com.zhou.mybatis.entity" /><!-- 设置package 为entity包里面的所有实体类设置别名 
+			（别名为其类名）如：Article -->
+	</typeAliases>
+	<environments default="dev">
+		<environment id="dev">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.cj.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/limited?&amp;useUnicode=true&amp;
+					characterEncoding=UTF8&amp;serverTimezone=GMT&amp;useSSL=false" />
+				<property name="username" value="root" />
+				<property name="password" value="zhouyuxin" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/zhou/mybatis/dao/UserMapper.xml" />
+	</mappers>
+</configuration>

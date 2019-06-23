@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.mybatis.dao.UserDAO">
+	<select id="getUserByCondition" parameterType="User" resultType="User">
+		select * from user
+		<where><!-- where 作用： -->
+			<if test="username!=null and username!=''">
+				and username=#{username}
+			</if>
+			<if test="role!=null and role!=''">
+				and role=#{role}
+			</if>
+		</where>
+	</select>
+	<select id="getUserByCondition2" resultType="User">
+		select * from user
+		where username=#{arg0} and pwd=#{arg1}
+	</select>
+
+	<select id="getUserByName" resultType="User">
+		<!-- bind 标签 从ognl表达式中创建一个变量 并将其绑定到 上下文 -->
+		<bind name="username" value="'%'+_parameter.trim()+'%'" />
+		<!-- OGNL表达式 参数使用_parameter .trim() 去除空格 -->
+		select * from user where username like#{username}
+	</select>
+
+	<select id="getUserByCondition3" resultType="User">
+		select * from user
+		<trim prefix="where" prefixOverrides="and | or"><!-- trim 作用： -->
+			<if test="username!=null and username!=''">
+				username=#{username}
+			</if>
+			<if test="role!=null and role!=''">
+				role=#{role}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 更新时用trim 串条件时 代替set 设置其 suffixOverrides 去掉后缀 -->
+	<update id="updateUser">
+		update user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="username!=null and username!=''">username=#{username},</if>
+			<if test="pwd!=null and pwd!=''">pwd=#{pwd},</if>
+		</trim>
+		where id=#{id}
+	</update>
+	<update id="updateUser2">
+		update user
+		<set>
+			<if test="username!=null and username!=''">username=#{username},</if>
+			<if test="pwd!=null and pwd!=''">pwd=#{pwd},</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<!-- foreach 用法： 对一个集合进行遍历，通常是在构建 IN 条件语句的时候 -->
+	<select id="getUserByIds" resultType="USer">
+		select * from user
+		<where>
+			<!-- 对 数组 的参数进行遍历 -->
+			<foreach collection="array" item="id">or id=#{id} </foreach>
+		</where>
+	</select>
+	<!--foreach 元素的功能非常强大，它允许你指定一个集合，声明可以在元素体内使用的集合项（item）和索引（index）变量 -->
+	<select id="getUserByIds2" resultType="User">
+		select*from user
+		<where>
+			id in
+			<foreach collection="list" item="id" open="(" separator=","
+				close=")">
+				#{id}
+			</foreach>
+			<!-- 它也允许你指定开头与结尾的字符串以及在迭代结果之间放置分隔符 -->
+		</where>
+	</select>
+
+
+
+</mapper>
