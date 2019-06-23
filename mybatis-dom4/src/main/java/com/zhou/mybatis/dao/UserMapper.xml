@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getUserByCondition3" resultType="User">
 		select * from user
-		<trim prefix="where" prefixOverrides="and | or"><!-- trim 作用： -->
+		<trim prefix="where" prefixOverrides="and | or"><!-- trim 作用：与where类似 -->
 			<if test="username!=null and username!=''">
 				username=#{username}
 			</if>
